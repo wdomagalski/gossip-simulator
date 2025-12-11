@@ -3,20 +3,24 @@
 
 Node::Node(int id) : id(id) {}
 
-void Node::addNeighbor(int n) {
+void Node::addNeighbor(int n, int delay) {
     neighbors.push_back(n);
     linkDelay.push_back(delay);
 }
 
-void Node::getMessage(int from, std::queue<int>& q) {
+void Node::getMessage(int from, int delay, std::queue<std::pair<int, int>>& q) {
     if (seen) return;
 
     seen = true;
-    std::cout << "Node " << id << " received message from " << from << "\n";
+    
+    std::cout << "Node " << id << " received message (+" << from << :ms) from " << from << "\n";
 
-    for (int n : neighbors) {
+    for (size_t i = 0; i < neighbors.size(); i++) {
+        int n = neighbors[i];
+        int nextDelay = linkDelay[i];
+
         if (n != from) {
-            q.push(n);
+            q.push({n, nextDelay});
         }
     }
 }

@@ -33,7 +33,7 @@ int main() {
 
     int start = 0;
     nodes[start].seen = true;
-    q.push(start);
+    q.push({start, 0});
 
     int reached = 1;
     long totalTime = 0;

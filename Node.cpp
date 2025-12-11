@@ -13,7 +13,7 @@ void Node::getMessage(int from, int delay, std::queue<std::pair<int, int>>& q) {
 
     seen = true;
     
-    std::cout << "Node " << id << " received message (+" << from << :ms) from " << from << "\n";
+    std::cout << "Node " << id << " received message (+" << delay << "ms) from " << from << "\n";
 
     for (size_t i = 0; i < neighbors.size(); i++) {
         int n = neighbors[i];

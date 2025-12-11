@@ -21,28 +21,35 @@ int main() {
         int a = dist(rng);
         int b = dist(rng);
         if (a != b) {
-            nodes[a].addNeighbor(b);
-            nodes[b].addNeighbor(a);
+            int delay = 5 + (rng() % 75);
+            nodes[a].addNeighbor(b, delay);
+            nodes[b].addNeighbor(a, delay);
         }
     }
 
     std::cout << "Starting gossip simulation...\n";
 
-    std::queue<int> q;
+    std::queue<std::pair<int,int>> q;
 
     int start = 0;
     nodes[start].seen = true;
     q.push(start);
 
     int reached = 1;
+    long totalTime = 0;
 
     while (!q.empty()) {
-        int cur = q.front();
+        auto [cur, delay] = q.front();
         q.pop();
 
-        for (int n : nodes[cur].neighbors) {
+        totalTime += delay;
+        
+        for (size_t i = 0; i < nodes[cur].neighbors.size(); i++) {
+            int n = nodes[cur].neighbors[i];
+            int linkDelay = nodes[cur].linkDelay[i];
+
             if (!nodes[n].seen) {
-                nodes[n].getMessage(cur, q);
+                nodes[n].getMessage(cur, linkDelay, q);
                 reached++;
             }
         }
@@ -50,6 +57,7 @@ int main() {
 
     std::cout << "\nFinished.\n";
     std::cout << "Reached " << reached << " out of " << NODE_COUNT << " nodes.\n";
+    std::cout << "Total propagation time: " << totalTime << " ms\n";
 
     return 0;
 }
